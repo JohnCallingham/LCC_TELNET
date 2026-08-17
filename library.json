@@ -1,0 +1,8 @@
+{
+"name": "LCC_TELNET",
+"version": "0.1.1",
+"dependencies":
+  {
+    "ESPTelnet": "https://github.com/LennartHennigs/ESPTelnet.git"
+  }
+}
