@@ -28,27 +28,44 @@ namespace TelnetLCC {
   void onTelnetInputReceived(String input) {
     // Handle the received input here
     Serial.printf("\n%6ld [onTelnetInputReceived] Received input: %s", millis(), input.c_str());
+
+    if (input.length() == 0) {
+      telnet.print("> ");
+      return;
+    } else if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
+      telnet.println("Available commands;-");
+      telnet.println("  help or ? - Show this help message");
+      telnet.println("  quit or q - Disconnect from the Telnet session");
+      telnet.println("  <other commands can be added here>");
+      telnet.print("> ");
+      return;
+    } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
+      telnet.println("Disconnecting from Telnet session...");
+      telnet.disconnectClient();
+      return;
+    } else {
+      telnet.println("Unknown command. Type 'help' or '?' for available commands.");
+      telnet.print("> ");
+      return;
+    }
   }
 
   void onTelnetConnect(String ip) {
-
     Serial.printf("\n%6ld [onTelnetConnect] Telnet connection from %s", millis(), ip.c_str());
     
     telnet.println("\nWelcome " + telnet.getIP());
-
     telnet.println("\nThis is an LCC node with the following configuration;-");
-
     telnet.println("\n            Model: " + model);
     char charNodeID[30] = "";
     sprintf(charNodeID, "%02X.%02X.%02X.%02X.%02X.%02X", nodeid.val[0], nodeid.val[1], nodeid.val[2], nodeid.val[3], nodeid.val[4], nodeid.val[5]);
-
     telnet.println("          Node ID: " + String(charNodeID));
     telnet.println(" Software version: " + swVersion);
     telnet.println(" Compilation date: " + String(__DATE__));
     telnet.println(" Compilation time: " + String(__TIME__));
 
     telnet.println("\n(Use CTRL+] + q  to disconnect.)");
-
+    telnet.println("\nMenu options are available by typing 'help' or '?' and pressing enter.");
+    telnet.print("> ");
   }
 
   void onTelnetDisconnect(String ip) {
