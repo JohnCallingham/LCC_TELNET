@@ -11,6 +11,7 @@ namespace TelnetLCC {
   void setSWVersion(String v);
   void onTelnetConnect(String ip);
   void onTelnetDisconnect(String ip);
+  void onTelnetInputReceived(String input);
   void loop();
   void logMessageCallbackFunction(const char* format, ...);
 }

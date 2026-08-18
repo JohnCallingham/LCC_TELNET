@@ -10,6 +10,7 @@ namespace TelnetLCC {
     telnet.begin();
     telnet.onConnect(onTelnetConnect);
     telnet.onDisconnect(onTelnetDisconnect);
+    telnet.onInputReceived(onTelnetInputReceived);
   }
 
   void setNodeID(NodeID id) {
@@ -22,6 +23,11 @@ namespace TelnetLCC {
 
   void setSWVersion(String v) {
     swVersion = v;
+  }
+
+  void onTelnetInputReceived(String input) {
+    // Handle the received input here
+    Serial.printf("\n%6ld [onTelnetInputReceived] Received input: %s", millis(), input.c_str());
   }
 
   void onTelnetConnect(String ip) {
