@@ -5,12 +5,30 @@ namespace TelnetLCC {
   NodeID nodeid;
   String model = "";
   String swVersion = "";
+  std::vector<TelnetMenuCommand> telnetMenuCommands;
 
   void initialiseTelnet() {
     telnet.begin();
     telnet.onConnect(onTelnetConnect);
     telnet.onDisconnect(onTelnetDisconnect);
     telnet.onInputReceived(onTelnetInputReceived);
+
+    /**
+     * Add the fixed menu commands.
+     */
+    TelnetLCC::TelnetMenuCommand command1;
+    command1.commandShort = "?";
+    command1.commandLong = "help";
+    command1.description = "Show this help message";
+    command1.handler = showMenuCommands;
+    TelnetLCC::registerTelnetMenuCommand(command1);
+
+    TelnetLCC::TelnetMenuCommand command2;
+    command2.commandShort = "q";
+    command2.commandLong = "quit";
+    command2.description = "Disconnect from the Telnet session";
+    command2.handler = disconnectTelnet;
+    TelnetLCC::registerTelnetMenuCommand(command2);
   }
 
   void setNodeID(NodeID id) {
@@ -29,25 +47,26 @@ namespace TelnetLCC {
     // Handle the received input here
     Serial.printf("\n%6ld [onTelnetInputReceived] Received input: %s", millis(), input.c_str());
 
+    // Check for no input.
     if (input.length() == 0) {
       telnet.print("> ");
       return;
-    } else if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
-      telnet.println("Available commands;-");
-      telnet.println("  help or ? - Show this help message");
-      telnet.println("  quit or q - Disconnect from the Telnet session");
-      telnet.println("  <other commands can be added here>");
-      telnet.print("> ");
-      return;
-    } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
-      telnet.println("Disconnecting from Telnet session...");
-      telnet.disconnectClient();
-      return;
-    } else {
-      telnet.println("Unknown command. Type 'help' or '?' for available commands.");
-      telnet.print("> ");
-      return;
+    } 
+
+    // Find a matching command.
+    for (const auto& command : telnetMenuCommands) {
+      if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
+        command.handler();
+        telnet.print("> ");
+        return;
+      }
     }
+  
+    // No matching command found.
+    telnet.println("Unknown command. Type 'help' or '?' for available commands.");
+    telnet.print("> ");
+    return;
+    
   }
 
   void onTelnetConnect(String ip) {
@@ -93,4 +112,53 @@ namespace TelnetLCC {
     Serial.print(logMessageBuffer);
   }
 
+  void registerTelnetMenuCommand(TelnetMenuCommand command) {
+    telnetMenuCommands.push_back(command);
+  }
+
+  void showMenuCommands() {
+    telnet.println("Available commands;-");
+    for (const auto& command : telnetMenuCommands) {
+      telnet.println("  " + command.commandLong + " or " + command.commandShort + " - " + command.description);
+    }
+  }
+
+  void disconnectTelnet() {
+    telnet.println("Disconnecting from Telnet session...");
+    telnet.disconnectClient();
+  }
 }
+
+  // void onTelnetInputReceived(String input) {
+  //   // Handle the received input here
+  //   Serial.printf("\n%6ld [onTelnetInputReceived] Received input: %s", millis(), input.c_str());
+
+  //   if (input.length() == 0) {
+  //     telnet.print("> ");
+  //     return;
+  //   } else if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
+  //     showMenuCommands();
+  //     telnet.print("> ");
+  //     return;
+  //   } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
+  //     disconnectTelnet();
+  //     return;
+  //   } else {
+  //     telnet.println("Unknown command. Type 'help' or '?' for available commands.");
+  //     telnet.print("> ");
+  //     return;
+  //   }
+  // }
+
+
+  
+    
+    // if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
+    //   showMenuCommands();
+    //   telnet.print("> ");
+    //   return;
+    // } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
+    //   disconnectTelnet();
+    //   return;
+    // }
+
