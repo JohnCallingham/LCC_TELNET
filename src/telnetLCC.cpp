@@ -31,6 +31,14 @@ namespace TelnetLCC {
     command2.argument = 0; // Not used.
     command2.handler = disconnectTelnet;
     TelnetLCC::registerTelnetMenuCommand(command2);
+
+    TelnetLCC::TelnetMenuCommand command3;
+    command3.commandShort = "cl";
+    command3.commandLong = "clear";
+    command3.description = "Clear the screen";
+    command3.argument = 0; // Not used.
+    command3.handler = clearTelnet;
+    TelnetLCC::registerTelnetMenuCommand(command3);
   }
 
   void setNodeID(NodeID id) {
@@ -127,5 +135,10 @@ namespace TelnetLCC {
   void disconnectTelnet(int i) {
     telnet.println("Disconnecting from Telnet session...");
     telnet.disconnectClient();
+  }
+
+  void clearTelnet(int i) {
+    // telnet.print("\033[1;31mThis is bold red text\033[0m");
+    telnet.print("\033[2J");
   }
 }

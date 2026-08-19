@@ -26,6 +26,7 @@ namespace TelnetLCC {
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
   void showMenuCommands(int i);
   void disconnectTelnet(int i);
+  void clearTelnet(int i);
 }
 
 #endif
