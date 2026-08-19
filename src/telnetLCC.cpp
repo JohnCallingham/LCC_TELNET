@@ -20,6 +20,7 @@ namespace TelnetLCC {
     command1.commandShort = "?";
     command1.commandLong = "help";
     command1.description = "Show this help message";
+    command1.argument = 0; // Not used.
     command1.handler = showMenuCommands;
     TelnetLCC::registerTelnetMenuCommand(command1);
 
@@ -27,6 +28,7 @@ namespace TelnetLCC {
     command2.commandShort = "q";
     command2.commandLong = "quit";
     command2.description = "Disconnect from the Telnet session";
+    command2.argument = 0; // Not used.
     command2.handler = disconnectTelnet;
     TelnetLCC::registerTelnetMenuCommand(command2);
   }
@@ -127,37 +129,3 @@ namespace TelnetLCC {
     telnet.disconnectClient();
   }
 }
-
-  // void onTelnetInputReceived(String input) {
-  //   // Handle the received input here
-  //   Serial.printf("\n%6ld [onTelnetInputReceived] Received input: %s", millis(), input.c_str());
-
-  //   if (input.length() == 0) {
-  //     telnet.print("> ");
-  //     return;
-  //   } else if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
-  //     showMenuCommands();
-  //     telnet.print("> ");
-  //     return;
-  //   } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
-  //     disconnectTelnet();
-  //     return;
-  //   } else {
-  //     telnet.println("Unknown command. Type 'help' or '?' for available commands.");
-  //     telnet.print("> ");
-  //     return;
-  //   }
-  // }
-
-
-  
-    
-    // if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")) {
-    //   showMenuCommands();
-    //   telnet.print("> ");
-    //   return;
-    // } else if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
-    //   disconnectTelnet();
-    //   return;
-    // }
-
