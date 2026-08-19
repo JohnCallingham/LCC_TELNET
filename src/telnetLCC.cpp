@@ -66,7 +66,6 @@ namespace TelnetLCC {
     telnet.println("Unknown command. Type 'help' or '?' for available commands.");
     telnet.print("> ");
     return;
-    
   }
 
   void onTelnetConnect(String ip) {
