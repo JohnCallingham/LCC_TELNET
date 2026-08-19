@@ -56,7 +56,7 @@ namespace TelnetLCC {
     // Find a matching command.
     for (const auto& command : telnetMenuCommands) {
       if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
-        command.handler();
+        command.handler(command.argument);
         telnet.print("> ");
         return;
       }
@@ -115,14 +115,14 @@ namespace TelnetLCC {
     telnetMenuCommands.push_back(command);
   }
 
-  void showMenuCommands() {
+  void showMenuCommands(int i) {
     telnet.println("Available commands;-");
     for (const auto& command : telnetMenuCommands) {
       telnet.println("  " + command.commandLong + " or " + command.commandShort + " - " + command.description);
     }
   }
 
-  void disconnectTelnet() {
+  void disconnectTelnet(int i) {
     telnet.println("Disconnecting from Telnet session...");
     telnet.disconnectClient();
   }

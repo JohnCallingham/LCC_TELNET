@@ -10,7 +10,8 @@ namespace TelnetLCC {
     String commandShort;
     String commandLong;
     String description;
-    void (*handler)();
+    int argument; // Used to specify the object value, e.g. toti 1.
+    void (*handler)(int);
   };
 
   void initialiseTelnet();
@@ -23,8 +24,8 @@ namespace TelnetLCC {
   void loop();
   void logMessageCallbackFunction(const char* format, ...);
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
-  void showMenuCommands();
-  void disconnectTelnet();
+  void showMenuCommands(int i);
+  void disconnectTelnet(int i);
 }
 
 #endif
