@@ -74,7 +74,7 @@ namespace TelnetLCC {
     // Find a matching command.
     for (const auto& command : telnetMenuCommands) {
       if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
-        command.handler(command.argument);
+        command.handler(command.commandShort, command.argument);
         telnet.print("> ");
         return;
       }
@@ -134,24 +134,24 @@ namespace TelnetLCC {
     telnetMenuCommands.push_back(command);
   }
 
-  void showMenuCommands(int i) {
+  void showMenuCommands(String commandShort, int i) {
     telnet.println("Available commands;-");
     for (const auto& command : telnetMenuCommands) {
       telnet.println("  " + command.commandLong + " or " + command.commandShort + " - " + command.description);
     }
   }
 
-  void disconnectTelnet(int i) {
+  void disconnectTelnet(String commandShort, int i) {
     telnet.println("Disconnecting from Telnet session...");
     telnet.disconnectClient();
   }
 
-  void clearScreen(int i) {
+  void clearScreen(String commandShort, int i) {
     // telnet.print("\033[1;31mThis is bold red text\033[0m");
     telnet.print("\033[2J");
   }
 
-  void showEvents(int i) {
+  void showEvents(String commandShort, int i) {
     telnet.printf("Num events: %d\r\n", OpenLcb.numEvents);
     telnet.printf("Index C/P Event                    C/P Event + 1\r\n");
 

@@ -12,7 +12,7 @@ namespace TelnetLCC {
     String commandLong;
     String description;
     int argument; // Used to specify the object value, e.g. toti 1.
-    void (*handler)(int);
+    void (*handler)(String, int);
   };
 
   void initialiseTelnet();
@@ -25,10 +25,10 @@ namespace TelnetLCC {
   void loop();
   void logMessageCallbackFunction(const char* format, ...);
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
-  void showMenuCommands(int i);
-  void disconnectTelnet(int i);
-  void clearScreen(int i);
-  void showEvents(int i);
+  void showMenuCommands(String commandShort, int i);
+  void disconnectTelnet(String commandShort, int i);
+  void clearScreen(String commandShort, int i);
+  void showEvents(String commandShort, int i);
   void printEventID(EventID eventID);
   void printFlags(uint16_t flags);
 }
