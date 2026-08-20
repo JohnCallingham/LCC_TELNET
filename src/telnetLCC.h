@@ -9,7 +9,6 @@
 namespace TelnetLCC {
   struct TelnetMenuCommand {
     String commandShort;
-    String commandLong;
     String description;
     int argument; // Used to specify the object value, e.g. toti 1.
     void (*handler)(String, int);

@@ -18,7 +18,6 @@ namespace TelnetLCC {
      */
     TelnetLCC::TelnetMenuCommand command1;
     command1.commandShort = "?";
-    command1.commandLong = "help";
     command1.description = "Show this help message";
     command1.argument = 0; // Not used.
     command1.handler = showMenuCommands;
@@ -26,7 +25,6 @@ namespace TelnetLCC {
 
     TelnetLCC::TelnetMenuCommand command2;
     command2.commandShort = "q";
-    command2.commandLong = "quit";
     command2.description = "Disconnect from the Telnet session";
     command2.argument = 0; // Not used.
     command2.handler = disconnectTelnet;
@@ -34,7 +32,6 @@ namespace TelnetLCC {
 
     TelnetLCC::TelnetMenuCommand command3;
     command3.commandShort = "cl";
-    command3.commandLong = "clear";
     command3.description = "Clear the screen";
     command3.argument = 0; // Not used.
     command3.handler = clearScreen;
@@ -42,7 +39,6 @@ namespace TelnetLCC {
   
     TelnetLCC::TelnetMenuCommand command4;
     command4.commandShort = "ev";
-    command4.commandLong = "event";
     command4.description = "Show the events";
     command4.argument = 0; // Not used.
     command4.handler = showEvents;
@@ -73,7 +69,8 @@ namespace TelnetLCC {
 
     // Find a matching command.
     for (const auto& command : telnetMenuCommands) {
-      if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
+      // if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
+      if (input.equalsIgnoreCase(command.commandShort)) {
         command.handler(command.commandShort, command.argument);
         telnet.print("> ");
         return;
@@ -98,9 +95,8 @@ namespace TelnetLCC {
     telnet.println(" Software version: " + swVersion);
     telnet.println(" Compilation date: " + String(__DATE__));
     telnet.println(" Compilation time: " + String(__TIME__));
-    // telnet.printf("Num events: %d\n", OpenLcb.numEvents);
 
-    telnet.println("\n(Use CTRL+] + q  to disconnect.)");
+    // telnet.println("\n(Use CTRL+] + q  to disconnect.)");
     telnet.println("\nMenu options are available by typing 'help' or '?' and pressing enter.");
     telnet.print("> ");
   }
@@ -137,7 +133,7 @@ namespace TelnetLCC {
   void showMenuCommands(String commandShort, int i) {
     telnet.println("Available commands;-");
     for (const auto& command : telnetMenuCommands) {
-      telnet.println("  " + command.commandLong + " or " + command.commandShort + " - " + command.description);
+      telnet.println("  " + command.commandShort + " - " + command.description);
     }
   }
 
@@ -147,7 +143,6 @@ namespace TelnetLCC {
   }
 
   void clearScreen(String commandShort, int i) {
-    // telnet.print("\033[1;31mThis is bold red text\033[0m");
     telnet.print("\033[2J");
   }
 
