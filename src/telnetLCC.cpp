@@ -37,8 +37,16 @@ namespace TelnetLCC {
     command3.commandLong = "clear";
     command3.description = "Clear the screen";
     command3.argument = 0; // Not used.
-    command3.handler = clearTelnet;
+    command3.handler = clearScreen;
     TelnetLCC::registerTelnetMenuCommand(command3);
+  
+    TelnetLCC::TelnetMenuCommand command4;
+    command4.commandShort = "ev";
+    command4.commandLong = "event";
+    command4.description = "Show the events";
+    command4.argument = 0; // Not used.
+    command4.handler = showEvents;
+    TelnetLCC::registerTelnetMenuCommand(command4);
   }
 
   void setNodeID(NodeID id) {
@@ -90,6 +98,7 @@ namespace TelnetLCC {
     telnet.println(" Software version: " + swVersion);
     telnet.println(" Compilation date: " + String(__DATE__));
     telnet.println(" Compilation time: " + String(__TIME__));
+    // telnet.printf("Num events: %d\n", OpenLcb.numEvents);
 
     telnet.println("\n(Use CTRL+] + q  to disconnect.)");
     telnet.println("\nMenu options are available by typing 'help' or '?' and pressing enter.");
@@ -137,8 +146,58 @@ namespace TelnetLCC {
     telnet.disconnectClient();
   }
 
-  void clearTelnet(int i) {
+  void clearScreen(int i) {
     // telnet.print("\033[1;31mThis is bold red text\033[0m");
     telnet.print("\033[2J");
+  }
+
+  void showEvents(int i) {
+    telnet.printf("Num events: %d\r\n", OpenLcb.numEvents);
+    telnet.printf("Index C/P Event                    C/P Event + 1\r\n");
+
+    for (uint16_t i = 0; i < OpenLcb.numEvents; i++) {
+      // Print index at the start of a line.
+      if ((i % 2) == 0) {
+        telnet.printf(" %02X   ", i);
+      }
+
+      // Print flags.
+      printFlags(OpenLcb.events[i].flags);
+
+      telnet.print("  ");
+
+      // Print eventID.
+      printEventID(OpenLcb.events[i].eid);
+
+      // Print spaces or CR,LF.
+      if (i % 2 == 0) {
+        telnet.print("  ");
+      } else {
+        telnet.println();
+      }
+    }
+
+    telnet.print("\r\n");
+  }
+
+  void printEventID(EventID eventID) {
+    for (int i = 0; i < 8; i++) {
+      if (i > 0) telnet.print(".");
+      telnet.printf("%02X", eventID.val[i]);
+    }
+  }
+
+  void printFlags(uint16_t flags) {
+    switch (flags) {
+      case 0x20:
+        telnet.print(" C");
+        break;
+      case 0x40:
+        telnet.print(" P");
+        break;
+      default:
+        telnet.printf("%02X", flags);
+        break;
+    }
   }
 }

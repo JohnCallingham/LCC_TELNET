@@ -4,6 +4,7 @@
 #include <vector>
 #include <ESPTelnet.h>
 #include "NodeID.h"
+#include "OpenLcbCore.h"
 
 namespace TelnetLCC {
   struct TelnetMenuCommand {
@@ -26,7 +27,10 @@ namespace TelnetLCC {
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
   void showMenuCommands(int i);
   void disconnectTelnet(int i);
-  void clearTelnet(int i);
+  void clearScreen(int i);
+  void showEvents(int i);
+  void printEventID(EventID eventID);
+  void printFlags(uint16_t flags);
 }
 
 #endif
