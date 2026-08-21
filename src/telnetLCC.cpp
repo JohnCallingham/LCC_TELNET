@@ -16,7 +16,7 @@ namespace TelnetLCC {
     /**
      * Add the fixed menu commands.
      */
-    
+
     // Create a TelnetMenuCommand object and set its common method.
     TelnetLCC::TelnetMenuCommand command;
     command.argument = 0; // Not used.
@@ -98,7 +98,7 @@ namespace TelnetLCC {
     telnet.println(" Compilation time: " + String(__TIME__));
 
     // telnet.println("\n(Use CTRL+] + q  to disconnect.)");
-    telnet.println("\nMenu options are available by typing 'help' or '?' and pressing enter.");
+    telnet.println("\nMenu options are available by typing '?' and pressing enter.");
     telnet.print("> ");
   }
 
