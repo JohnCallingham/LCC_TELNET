@@ -23,13 +23,13 @@ namespace TelnetLCC {
 
     // Register a menu command to show help information.
     command.commandShort = "?";
-    command.description = "Show this help message";
+    command.description = " Show this help message";
     command.handler = showMenuCommands;
     TelnetLCC::registerTelnetMenuCommand(command);
 
     // Register a menu command to allow Telnet session disconnection.
     command.commandShort = "q";
-    command.description = "Disconnect from the Telnet session";
+    command.description = " Disconnect from the Telnet session";
     command.handler = disconnectTelnet;
     TelnetLCC::registerTelnetMenuCommand(command);
 
@@ -47,7 +47,7 @@ namespace TelnetLCC {
 
     // Register a menu command to show the Preference values.
     command.commandShort = "p";
-    command.description = "Show the Preference values";
+    command.description = " Show the Preference values";
     command.handler = showPreferenceValues;
     TelnetLCC::registerTelnetMenuCommand(command);
   }
