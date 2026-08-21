@@ -30,6 +30,7 @@ namespace TelnetLCC {
   void showEvents(String commandShort, int i);
   void printEventID(EventID eventID);
   void printFlags(uint16_t flags);
+  void showPreferenceValues(String commandShort, int i);
 }
 
 #endif

@@ -44,6 +44,12 @@ namespace TelnetLCC {
     command.description = "Show the events";
     command.handler = showEvents;
     TelnetLCC::registerTelnetMenuCommand(command);
+
+    // Register a menu command to show the Preference values.
+    command.commandShort = "p";
+    command.description = "Show the Preference values";
+    command.handler = showPreferenceValues;
+    TelnetLCC::registerTelnetMenuCommand(command);
   }
 
   void setNodeID(NodeID id) {
@@ -195,5 +201,11 @@ namespace TelnetLCC {
         telnet.printf("%02X", flags);
         break;
     }
+  }
+
+  void showPreferenceValues(String commandShort, int i) {
+
+
+
   }
 }
