@@ -16,33 +16,34 @@ namespace TelnetLCC {
     /**
      * Add the fixed menu commands.
      */
-    TelnetLCC::TelnetMenuCommand command1;
-    command1.commandShort = "?";
-    command1.description = "Show this help message";
-    command1.argument = 0; // Not used.
-    command1.handler = showMenuCommands;
-    TelnetLCC::registerTelnetMenuCommand(command1);
+    
+    // Create a TelnetMenuCommand object and set its common method.
+    TelnetLCC::TelnetMenuCommand command;
+    command.argument = 0; // Not used.
 
-    TelnetLCC::TelnetMenuCommand command2;
-    command2.commandShort = "q";
-    command2.description = "Disconnect from the Telnet session";
-    command2.argument = 0; // Not used.
-    command2.handler = disconnectTelnet;
-    TelnetLCC::registerTelnetMenuCommand(command2);
+    // Register a menu command to show help information.
+    command.commandShort = "?";
+    command.description = "Show this help message";
+    command.handler = showMenuCommands;
+    TelnetLCC::registerTelnetMenuCommand(command);
 
-    TelnetLCC::TelnetMenuCommand command3;
-    command3.commandShort = "cl";
-    command3.description = "Clear the screen";
-    command3.argument = 0; // Not used.
-    command3.handler = clearScreen;
-    TelnetLCC::registerTelnetMenuCommand(command3);
+    // Register a menu command to allow Telnet session disconnection.
+    command.commandShort = "q";
+    command.description = "Disconnect from the Telnet session";
+    command.handler = disconnectTelnet;
+    TelnetLCC::registerTelnetMenuCommand(command);
+
+    // Register a menu command to clear the Telnet client screen.
+    command.commandShort = "cl";
+    command.description = "Clear the screen";
+    command.handler = clearScreen;
+    TelnetLCC::registerTelnetMenuCommand(command);
   
-    TelnetLCC::TelnetMenuCommand command4;
-    command4.commandShort = "ev";
-    command4.description = "Show the events";
-    command4.argument = 0; // Not used.
-    command4.handler = showEvents;
-    TelnetLCC::registerTelnetMenuCommand(command4);
+    // Register a menu command to show the events.
+    command.commandShort = "ev";
+    command.description = "Show the events";
+    command.handler = showEvents;
+    TelnetLCC::registerTelnetMenuCommand(command);
   }
 
   void setNodeID(NodeID id) {
@@ -69,8 +70,8 @@ namespace TelnetLCC {
 
     // Find a matching command.
     for (const auto& command : telnetMenuCommands) {
-      // if (input.equalsIgnoreCase(command.commandLong) || input.equalsIgnoreCase(command.commandShort)) {
       if (input.equalsIgnoreCase(command.commandShort)) {
+        // Found the matching command, so call its handler function.
         command.handler(command.commandShort, command.argument);
         telnet.print("> ");
         return;
