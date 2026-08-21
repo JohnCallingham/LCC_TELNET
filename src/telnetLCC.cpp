@@ -85,7 +85,7 @@ namespace TelnetLCC {
     }
   
     // No matching command found.
-    telnet.println("Unknown command. Type 'help' or '?' for available commands.");
+    telnet.println("Unknown command. Type '?' for available commands.");
     telnet.print("> ");
     return;
   }
@@ -204,8 +204,25 @@ namespace TelnetLCC {
   }
 
   void showPreferenceValues(String commandShort, int i) {
+    telnet.print("Preferences values;-\r\n");
+
+
+    // NodeID nodeID = ConfigurationPreferences::getNodeID(NodeID(0,0,0,0,0,0));
+
+    telnet.print(" Node ID: ");
+    printNodeID(ConfigurationPreferences::getNodeID(NodeID(0,0,0,0,0,0)));
 
 
 
+
+
+    telnet.print("\r\n");
+  }
+
+  void printNodeID(NodeID nodeID) {
+    for (int i = 0; i < 6; i++) {
+      if (i > 0) telnet.print(".");
+      telnet.printf("%02X", nodeID.val[i]);
+    }
   }
 }

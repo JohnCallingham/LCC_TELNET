@@ -5,6 +5,7 @@
 #include <ESPTelnet.h>
 #include "NodeID.h"
 #include "OpenLcbCore.h"
+#include "configurationPreferences.h"
 
 namespace TelnetLCC {
   struct TelnetMenuCommand {
@@ -31,6 +32,7 @@ namespace TelnetLCC {
   void printEventID(EventID eventID);
   void printFlags(uint16_t flags);
   void showPreferenceValues(String commandShort, int i);
+  void printNodeID(NodeID nodeID);
 }
 
 #endif
