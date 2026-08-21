@@ -206,16 +206,17 @@ namespace TelnetLCC {
   void showPreferenceValues(String commandShort, int i) {
     telnet.print("Preferences values;-\r\n");
 
-
-    // NodeID nodeID = ConfigurationPreferences::getNodeID(NodeID(0,0,0,0,0,0));
-
-    telnet.print(" Node ID: ");
+    telnet.print("         Node ID: ");
     printNodeID(ConfigurationPreferences::getNodeID(NodeID(0,0,0,0,0,0)));
+    telnet.println();
 
+    telnet.printf("       WiFi SSID: %s", ConfigurationPreferences::getWiFiSSID());
+    telnet.println();
 
+    telnet.printf("  Hub IP Address: %s", ConfigurationPreferences::getHubIPAddress().c_str());
+    telnet.println();
 
-
-
+    telnet.printf(" Node IP Address: %s", ConfigurationPreferences::getNodeIPAddress().c_str());
     telnet.print("\r\n");
   }
 
