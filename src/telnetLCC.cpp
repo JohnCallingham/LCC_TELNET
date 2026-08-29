@@ -235,6 +235,7 @@ namespace TelnetLCC {
 
   void restartProcessor(String commandShort, int i) {
     // Disconnect telnet first.
+    telnet.println("Restarting the processor");
     telnet.println("Disconnecting from Telnet session...");
     telnet.disconnectClient();
 
