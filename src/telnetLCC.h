@@ -33,6 +33,7 @@ namespace TelnetLCC {
   void printFlags(uint16_t flags);
   void showPreferenceValues(String commandShort, int i);
   void printNodeID(NodeID nodeID);
+  void restartProcessor(String commandShort, int i);
 }
 
 #endif

@@ -50,6 +50,12 @@ namespace TelnetLCC {
     command.description = " Show the Preference values";
     command.handler = showPreferenceValues;
     TelnetLCC::registerTelnetMenuCommand(command);
+
+    // Register a command to restart the processor.
+    command.commandShort = "r";
+    command.description = " Restart the processor";
+    command.handler = restartProcessor;
+    TelnetLCC::registerTelnetMenuCommand(command);
   }
 
   void setNodeID(NodeID id) {
@@ -225,5 +231,13 @@ namespace TelnetLCC {
       if (i > 0) telnet.print(".");
       telnet.printf("%02X", nodeID.val[i]);
     }
+  }
+
+  void restartProcessor(String commandShort, int i) {
+    // Disconnect telnet first.
+    telnet.println("Disconnecting from Telnet session...");
+    telnet.disconnectClient();
+
+    ESP.restart();
   }
 }
