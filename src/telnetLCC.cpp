@@ -7,6 +7,8 @@ namespace TelnetLCC {
   String swVersion = "";
   std::vector<TelnetMenuCommand> telnetMenuCommands;
 
+  bool displayMessages;
+
   void initialiseTelnet() {
     telnet.begin();
     telnet.onConnect(onTelnetConnect);

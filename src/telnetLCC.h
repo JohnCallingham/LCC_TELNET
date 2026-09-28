@@ -15,8 +15,6 @@ namespace TelnetLCC {
     void (*handler)(String, int);
   };
 
-  bool displayMessages;
-
   void initialiseTelnet();
   void setNodeID(NodeID id);
   void setModel(String m);
@@ -35,6 +33,7 @@ namespace TelnetLCC {
   void printFlags(uint16_t flags);
   void showPreferenceValues(String commandShort, int i);
   void printNodeID(NodeID nodeID);
+  void displayLogMessages(String commandShort, int i);
   void restartProcessor(String commandShort, int i);
 }
 
