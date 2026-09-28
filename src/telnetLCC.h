@@ -24,6 +24,7 @@ namespace TelnetLCC {
   void onTelnetInputReceived(String input);
   void loop();
   void logMessageCallbackFunction(const char* format, ...);
+  void statusMessage(int row, String route, String state);
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
   void showMenuCommands(String commandShort, int i);
   void disconnectTelnet(String commandShort, int i);
@@ -34,6 +35,7 @@ namespace TelnetLCC {
   void showPreferenceValues(String commandShort, int i);
   void printNodeID(NodeID nodeID);
   void displayLogMessages(String commandShort, int i);
+  void displayStatusMessages(String commandShort, int i);
   void restartProcessor(String commandShort, int i);
 }
 

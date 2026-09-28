@@ -8,6 +8,7 @@ namespace TelnetLCC {
   std::vector<TelnetMenuCommand> telnetMenuCommands;
 
   bool displayMessages;
+  bool displayStatus;
 
   void initialiseTelnet() {
     telnet.begin();
@@ -15,6 +16,7 @@ namespace TelnetLCC {
     telnet.onDisconnect(onTelnetDisconnect);
     telnet.onInputReceived(onTelnetInputReceived);
     displayMessages = false;
+    displayStatus = false;
 
     /**
      * Add the fixed menu commands.
@@ -58,6 +60,12 @@ namespace TelnetLCC {
     command.commandShort = "d";
     command.description = " Display log messages";
     command.handler = displayLogMessages;
+    TelnetLCC::registerTelnetMenuCommand(command);
+
+    // Register the display status command.
+    command.commandShort = "ds";
+    command.description = "Display status messages";
+    command.handler = displayStatusMessages;
     TelnetLCC::registerTelnetMenuCommand(command);
 
     // Register a command to restart the processor.
@@ -148,6 +156,17 @@ namespace TelnetLCC {
 
     // Serial monitor doesn't need the carriage return.
     Serial.print(logMessageBuffer);
+  }
+
+  void statusMessage(int row, String route, String state) {
+    if (! displayStatus) return;
+
+    // Move the cursor to row 'row' column 1.
+    // ^[[<v>;<h>f
+    telnet.printf("\033[%d;1f", row);
+
+    // Display the route and its state.
+    telnet.printf("%10s %10s", route, state);
   }
 
   void registerTelnetMenuCommand(TelnetMenuCommand command) {
@@ -246,6 +265,13 @@ namespace TelnetLCC {
 
   void displayLogMessages(String commandShort, int i) {
     displayMessages = true;
+  }
+
+  void displayStatusMessages(String commandShort, int i) {
+    displayStatus = true;
+
+    // Clear the screen to allow the status messages to be displayed in a fixed position on the screen.
+    telnet.print("\033[2J");
   }
 
   void restartProcessor(String commandShort, int i) {
