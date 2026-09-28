@@ -12,6 +12,7 @@ namespace TelnetLCC {
     telnet.onConnect(onTelnetConnect);
     telnet.onDisconnect(onTelnetDisconnect);
     telnet.onInputReceived(onTelnetInputReceived);
+    displayMessages = false;
 
     /**
      * Add the fixed menu commands.
@@ -49,6 +50,12 @@ namespace TelnetLCC {
     command.commandShort = "p";
     command.description = " Show the Preference values";
     command.handler = showPreferenceValues;
+    TelnetLCC::registerTelnetMenuCommand(command);
+
+    // Register a command to display log messages.
+    command.commandShort = "d";
+    command.description = " Display log messages";
+    command.handler = displayLogMessages;
     TelnetLCC::registerTelnetMenuCommand(command);
 
     // Register a command to restart the processor.
@@ -123,6 +130,8 @@ namespace TelnetLCC {
   }
 
   void logMessageCallbackFunction(const char* format, ...) {
+    if (! displayMessages) return;
+    
     char logMessageBuffer[200];
 
     // Format the log message using the provided format and arguments.
@@ -231,6 +240,10 @@ namespace TelnetLCC {
       if (i > 0) telnet.print(".");
       telnet.printf("%02X", nodeID.val[i]);
     }
+  }
+
+  void displayLogMessages(String commandShort, int i) {
+    displayMessages = true;
   }
 
   void restartProcessor(String commandShort, int i) {

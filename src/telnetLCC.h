@@ -15,6 +15,8 @@ namespace TelnetLCC {
     void (*handler)(String, int);
   };
 
+  bool displayMessages;
+
   void initialiseTelnet();
   void setNodeID(NodeID id);
   void setModel(String m);
