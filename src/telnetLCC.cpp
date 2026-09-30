@@ -129,6 +129,10 @@ namespace TelnetLCC {
     // telnet.println("\n(Use CTRL+] + q  to disconnect.)");
     telnet.println("\nMenu options are available by typing '?' and pressing enter.");
     telnet.print("> ");
+
+    // Clear the display flags in case they were true from a previous session.
+    displayMessages = false;
+    displayStatus = false;
   }
 
   void onTelnetDisconnect(String ip) {
@@ -161,12 +165,12 @@ namespace TelnetLCC {
   void statusMessage(int row, String route, String state) {
     if (! displayStatus) return;
 
-    // Move the cursor to row 'row' column 1.
+    // Move the cursor to row 'row', column 1.
     // ^[[<v>;<h>f
     telnet.printf("\033[%d;1f", row);
 
     // Display the route and its state.
-    telnet.printf("%10s %10s", route, state);
+    telnet.printf("%20s   %-20s", route, state);
   }
 
   void registerTelnetMenuCommand(TelnetMenuCommand command) {
@@ -272,6 +276,26 @@ namespace TelnetLCC {
 
     // Clear the screen to allow the status messages to be displayed in a fixed position on the screen.
     telnet.print("\033[2J");
+
+    // Display the fixed column headers.
+    telnet.print("    Route Name       :    Route State\r\n");
+    telnet.print("==================== : ====================");
+
+    // Hide the cursor.
+    telnet.print("\033[?25l");
+
+    /*
+    void showCursor(bool show) const {
+#define CSI "\e["
+  if (show) {
+    fputs(CSI "?25h", stdout);
+  }
+  else {
+    fputs(CSI "?25l", stdout);
+  }
+#undef CSI
+}
+*/
   }
 
   void restartProcessor(String commandShort, int i) {
