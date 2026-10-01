@@ -23,20 +23,29 @@ namespace TelnetLCC {
   void onTelnetDisconnect(String ip);
   void onTelnetInputReceived(String input);
   void loop();
-  void logMessageCallbackFunction(const char* format, ...);
-  void statusMessage(int row, String route, String state);
   void registerTelnetMenuCommand(struct TelnetMenuCommand command);
+
+  /**
+   * Command handlers.
+   */
   void showMenuCommands(String commandShort, int i);
   void disconnectTelnet(String commandShort, int i);
   void clearScreen(String commandShort, int i);
   void showEvents(String commandShort, int i);
+  void displayLogMessages(String commandShort, int i);
+  void restartProcessor(String commandShort, int i);
+
+  /**
+    * Helper functions.
+    */
+  void logMessageCallbackFunction(const char* format, ...);
+  void displayMessageAtPosition(int row, int col, String message);
   void printEventID(EventID eventID);
   void printFlags(uint16_t flags);
   void showPreferenceValues(String commandShort, int i);
   void printNodeID(NodeID nodeID);
-  void displayLogMessages(String commandShort, int i);
-  void displayStatusMessages(String commandShort, int i);
-  void restartProcessor(String commandShort, int i);
+  void clearScreen();
+
 }
 
 #endif

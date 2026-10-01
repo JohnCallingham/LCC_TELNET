@@ -8,7 +8,7 @@ namespace TelnetLCC {
   std::vector<TelnetMenuCommand> telnetMenuCommands;
 
   bool displayMessages;
-  bool displayStatus;
+  // bool displayStatus;
 
   void initialiseTelnet() {
     telnet.begin();
@@ -16,7 +16,7 @@ namespace TelnetLCC {
     telnet.onDisconnect(onTelnetDisconnect);
     telnet.onInputReceived(onTelnetInputReceived);
     displayMessages = false;
-    displayStatus = false;
+    // displayStatus = false;
 
     /**
      * Add the fixed menu commands.
@@ -62,11 +62,11 @@ namespace TelnetLCC {
     command.handler = displayLogMessages;
     TelnetLCC::registerTelnetMenuCommand(command);
 
-    // Register the display status command.
-    command.commandShort = "ds";
-    command.description = "Display status messages";
-    command.handler = displayStatusMessages;
-    TelnetLCC::registerTelnetMenuCommand(command);
+    // // Register the display status command.
+    // command.commandShort = "ds";
+    // command.description = "Display status messages";
+    // command.handler = displayStatusMessages;
+    // TelnetLCC::registerTelnetMenuCommand(command);
 
     // Register a command to restart the processor.
     command.commandShort = "r";
@@ -132,7 +132,7 @@ namespace TelnetLCC {
 
     // Clear the display flags in case they were true from a previous session.
     displayMessages = false;
-    displayStatus = false;
+    // displayStatus = false;
   }
 
   void onTelnetDisconnect(String ip) {
@@ -143,39 +143,13 @@ namespace TelnetLCC {
     telnet.loop();
   }
 
-  void logMessageCallbackFunction(const char* format, ...) {
-    if (! displayMessages) return;
-    
-    char logMessageBuffer[200];
-
-    // Format the log message using the provided format and arguments.
-    va_list argptr;
-    va_start(argptr, format);
-    vsnprintf(logMessageBuffer, sizeof(logMessageBuffer), format, argptr);
-    va_end(argptr);
-
-    // Telnet needs a carriage return before the line feed to display correctly.
-    telnet.print("\r");
-    telnet.print(logMessageBuffer);
-
-    // Serial monitor doesn't need the carriage return.
-    Serial.print(logMessageBuffer);
-  }
-
-  void statusMessage(int row, String route, String state) {
-    if (! displayStatus) return;
-
-    // Move the cursor to row 'row', column 1.
-    // ^[[<v>;<h>f
-    telnet.printf("\033[%d;1f", row);
-
-    // Display the route and its state.
-    telnet.printf("%20s   %-20s", route, state);
-  }
-
   void registerTelnetMenuCommand(TelnetMenuCommand command) {
     telnetMenuCommands.push_back(command);
   }
+
+  /**
+   * Command handlers.
+   */
 
   void showMenuCommands(String commandShort, int i) {
     telnet.println("Available commands;-");
@@ -190,7 +164,8 @@ namespace TelnetLCC {
   }
 
   void clearScreen(String commandShort, int i) {
-    telnet.print("\033[2J");
+    // telnet.print("\033[2J");
+    clearScreen();
   }
 
   void showEvents(String commandShort, int i) {
@@ -220,6 +195,51 @@ namespace TelnetLCC {
     }
 
     telnet.print("\r\n");
+  }
+
+  void displayLogMessages(String commandShort, int i) {
+    displayMessages = true;
+  }
+
+  void restartProcessor(String commandShort, int i) {
+    // Disconnect telnet first.
+    telnet.println("Restarting the processor");
+    telnet.println("Disconnecting from Telnet session...");
+    telnet.disconnectClient();
+
+    ESP.restart();
+  }
+
+  /**
+    * Helper functions.
+    */
+
+  void logMessageCallbackFunction(const char* format, ...) {
+    if (! displayMessages) return;
+    
+    char logMessageBuffer[200];
+
+    // Format the log message using the provided format and arguments.
+    va_list argptr;
+    va_start(argptr, format);
+    vsnprintf(logMessageBuffer, sizeof(logMessageBuffer), format, argptr);
+    va_end(argptr);
+
+    // Telnet needs a carriage return before the line feed to display correctly.
+    telnet.print("\r");
+    telnet.print(logMessageBuffer);
+
+    // Serial monitor doesn't need the carriage return.
+    Serial.print(logMessageBuffer);
+  }
+
+  void displayMessageAtPosition(int row, int col, String message) {
+    // Move the cursor to the required row and col position.
+    // ^[[<v>;<h>f
+    telnet.printf("\033[%d;%df", row, col);
+
+    // Display the message at the required position.
+    telnet.print(message);
   }
 
   void printEventID(EventID eventID) {
@@ -267,43 +287,8 @@ namespace TelnetLCC {
     }
   }
 
-  void displayLogMessages(String commandShort, int i) {
-    displayMessages = true;
-  }
-
-  void displayStatusMessages(String commandShort, int i) {
-    displayStatus = true;
-
-    // Clear the screen to allow the status messages to be displayed in a fixed position on the screen.
+  void clearScreen() {
     telnet.print("\033[2J");
-
-    // Display the fixed column headers.
-    telnet.print("    Route Name       :    Route State\r\n");
-    telnet.print("==================== : ====================");
-
-    // Hide the cursor.
-    telnet.print("\033[?25l");
-
-    /*
-    void showCursor(bool show) const {
-#define CSI "\e["
-  if (show) {
-    fputs(CSI "?25h", stdout);
-  }
-  else {
-    fputs(CSI "?25l", stdout);
-  }
-#undef CSI
-}
-*/
   }
 
-  void restartProcessor(String commandShort, int i) {
-    // Disconnect telnet first.
-    telnet.println("Restarting the processor");
-    telnet.println("Disconnecting from Telnet session...");
-    telnet.disconnectClient();
-
-    ESP.restart();
-  }
-}
+} // end of namespace TelnetLCC
