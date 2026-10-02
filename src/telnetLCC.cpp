@@ -97,6 +97,12 @@ namespace TelnetLCC {
       return;
     } 
 
+    // Allow a "q"<CR> to disconnect telnet. This is useful when displaying a fixed position table.
+    if (input == "q") {
+      telnet.println("Disconnecting from Telnet session...");
+      telnet.disconnectClient();
+    }
+
     // Find a matching command.
     for (const auto& command : telnetMenuCommands) {
       if (input.equalsIgnoreCase(command.commandShort)) {
