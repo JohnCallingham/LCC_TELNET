@@ -204,7 +204,11 @@ namespace TelnetLCC {
   }
 
   void displayLogMessages(String commandShort, int i) {
-    displayMessages = true;
+    if (displayMessages) {
+      displayMessages = false;
+    } else {
+      displayMessages = true;
+    }
   }
 
   void restartProcessor(String commandShort, int i) {
